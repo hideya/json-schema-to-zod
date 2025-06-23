@@ -10,10 +10,10 @@
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "node pre-build.cjs",
+    "build": "npm run clean && npm run build:ts",
     "build:ts": "tsc -p tsconfig.json",
     "postbuild": "node restore-src.cjs",
-    "build": "npm run clean && npm run build:ts",
-    "test": "node esm-test/index.js"
+    "test": "npm link && pushd esm-test && npm link @h1deya/json-schema-to-zod && node index.js && popd && npm unlink"
   },
   "keywords": [
     "zod",

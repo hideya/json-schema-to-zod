@@ -17,19 +17,19 @@ npm link
 # Run the ESM test
 echo ""
 echo "=== Testing ESM imports ==="
-cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod/esm-test
+pushd esm-test
 npm link @h1deya/json-schema-to-zod
 node index.js
+popd
 
 # Create a package for mcp-client-langchain-ts
-cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod
 echo ""
 echo "Creating package tarball..."
 npm pack
 
 echo ""
 echo "To install in your main project, run:"
-echo "cd /Users/hideya/Desktop/WS/AT/mcp-client-langchain-ts"
+echo "cd ../mcp-client-langchain-ts"
 echo "npm uninstall @n8n/json-schema-to-zod"
-echo "npm install /Users/hideya/Desktop/WS/AT/json-schema-to-zod/h1deya-json-schema-to-zod-0.1.0.tgz"
+echo "npm install ../json-schema-to-zod/h1deya-json-schema-to-zod-0.1.0.tgz"
 echo "npm run build"
