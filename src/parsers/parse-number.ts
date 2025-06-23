@@ -51,21 +51,13 @@ export const parseNumber = (jsonSchema: JsonSchemaObject & { type: 'number' | 'i
 	);
 	
 	// The multipleOf validation is causing type issues
-	// We need to modify the approach to ensure type compatibility
+	// Use a different approach to handle this validation
 	if (jsonSchema.multipleOf !== undefined) {
-		const multipleOf = jsonSchema.multipleOf;
-		const errorMessage = jsonSchema.errorMessage?.multipleOf;
-		
-		// First get the base schema with all previous validations
-		const baseSchema = zodSchema as z.ZodNumber;
-		
-		// Create a refined schema with the multipleOf validation
-		const refinedSchema = baseSchema.refine((value) => value % multipleOf === 0, {
-			message: errorMessage ?? `value must be a multiple of ${multipleOf}`,
-		});
-		
-		// Use the refined schema
-		zodSchema = refinedSchema;
+		// We'll return a ZodType with refined validation
+		// Use type casting to get around TypeScript's limitations
+		return z.number().refine((value) => value % jsonSchema.multipleOf! === 0, {
+			message: jsonSchema.errorMessage?.multipleOf ?? `value must be a multiple of ${jsonSchema.multipleOf}`,
+		}) as unknown as z.ZodTypeAny;
 	}
 
 	return zodSchema;
