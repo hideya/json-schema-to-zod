@@ -8,6 +8,7 @@
     ".": "./dist/esm/index.js"
   },
   "scripts": {
+    "clean:all": "git clean -fdxn -e .env && read -p 'OK?' && git clean -fdx -e .env",
     "clean": "rimraf dist",
     "prebuild": "node pre-build.cjs",
     "build": "npm run clean && npm run build:ts",
