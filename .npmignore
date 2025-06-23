@@ -1,0 +1,16 @@
+# Source
+src
+tsconfig*
+
+# Config files
+.eslintrc.js
+.prettierrc
+.editorconfig
+postcjs.js
+postesm.js
+jest.config.js
+
+# Development files
+node_modules
+.github
+.vscode

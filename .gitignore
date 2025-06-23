@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist
+*.tgz
+
+# IDE
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Misc
+.DS_Store
+*.log
