@@ -10,8 +10,11 @@ export const parseNumber = (jsonSchema: JsonSchemaObject & { type: 'number' | 'i
 		zodSchema = zodSchema.int();
 	}
 
+	// Cast to appropriate type for min/max methods
+	const numberSchema = zodSchema as z.ZodNumber;
+
 	zodSchema = extendSchemaWithMessage(zodSchema, jsonSchema, 'minimum', (zs, minimum, errorMsg) =>
-		zs.gte(minimum, errorMsg),
+		numberSchema.gte(minimum, errorMsg),
 	);
 	zodSchema = extendSchemaWithMessage(
 		zodSchema,
@@ -21,15 +24,15 @@ export const parseNumber = (jsonSchema: JsonSchemaObject & { type: 'number' | 'i
 			if (typeof exclusiveMinimum === 'boolean') {
 				const minimum = jsonSchema.minimum;
 				if (exclusiveMinimum && minimum !== undefined) {
-					return zs.gt(minimum, errorMsg);
+					return numberSchema.gt(minimum, errorMsg);
 				}
 				return zs;
 			}
-			return zs.gt(exclusiveMinimum, errorMsg);
+			return numberSchema.gt(exclusiveMinimum, errorMsg);
 		},
 	);
 	zodSchema = extendSchemaWithMessage(zodSchema, jsonSchema, 'maximum', (zs, maximum, errorMsg) =>
-		zs.lte(maximum, errorMsg),
+		numberSchema.lte(maximum, errorMsg),
 	);
 	zodSchema = extendSchemaWithMessage(
 		zodSchema,
@@ -39,21 +42,23 @@ export const parseNumber = (jsonSchema: JsonSchemaObject & { type: 'number' | 'i
 			if (typeof exclusiveMaximum === 'boolean') {
 				const maximum = jsonSchema.maximum;
 				if (exclusiveMaximum && maximum !== undefined) {
-					return zs.lt(maximum, errorMsg);
+					return numberSchema.lt(maximum, errorMsg);
 				}
 				return zs;
 			}
-			return zs.lt(exclusiveMaximum, errorMsg);
+			return numberSchema.lt(exclusiveMaximum, errorMsg);
 		},
 	);
 	zodSchema = extendSchemaWithMessage(
 		zodSchema,
 		jsonSchema,
 		'multipleOf',
-		(zs, multipleOf, errorMsg) =>
-			zs.refine((value) => value % multipleOf === 0, {
+		(zs, multipleOf, errorMsg) => {
+			// Use type casting to ensure TypeScript understands the return type
+			return z.number().refine((value) => value % multipleOf === 0, {
 				message: errorMsg ?? `value must be a multiple of ${multipleOf}`,
-			}),
+			}) as unknown as z.ZodTypeAny;
+		},
 	);
 
 	return zodSchema;

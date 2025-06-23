@@ -49,13 +49,17 @@ try {
 
 ## 🔍 What's Fixed?
 
-This fork addresses a critical issue with ESM module resolution in the original package. When using the package in an ESM environment (projects with `"type": "module"` in package.json), Node.js requires local imports to include file extensions (e.g., './parsers/parse-schema.js').
+This fork addresses two critical issues with the original package:
 
-Our solution:
+1. **ESM Module Resolution**: When using the package in an ESM environment (projects with `"type": "module"` in package.json), Node.js requires local imports to include file extensions. Our solution:
+   - Adds `.js` extensions to all local imports in the compiled ESM output
+   - Uses `NodeNext` moduleResolution in TypeScript config
+   - Properly configures package exports for dual ESM/CommonJS compatibility
 
-1. Adds `.js` extensions to all local imports in the compiled ESM output
-2. Uses `NodeNext` moduleResolution in TypeScript config
-3. Properly configures package exports for dual ESM/CommonJS compatibility
+2. **TypeScript Compatibility**: The original package has type issues that prevent successful TypeScript compilation. Our solution:
+   - Fixes type compatibility with the Zod library
+   - Adds proper type casting for Zod methods
+   - Resolves issues with generic types and type inference
 
 ## 📋 Source Version
 

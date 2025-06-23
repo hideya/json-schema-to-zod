@@ -25,7 +25,9 @@ export const parseArray = (jsonSchema: JsonSchemaObject & { type: 'array' }, ref
 				...refs,
 				path: [...refs.path, 'additionalItems'],
 			});
-			zodSchema = zodSchema.rest(additionalSchema);
+			// We need to cast zodSchema to allow the .rest() method
+			const tupleSchemaCast = zodSchema as any;
+			zodSchema = tupleSchemaCast.rest(additionalSchema);
 		}
 	} else {
 		// List validation
@@ -36,22 +38,25 @@ export const parseArray = (jsonSchema: JsonSchemaObject & { type: 'array' }, ref
 		zodSchema = z.array(innerSchema);
 	}
 
+	// Cast to ZodArray for method access
+	const arraySchemaCast = zodSchema as any;
+
 	zodSchema = extendSchemaWithMessage(
 		zodSchema,
 		jsonSchema,
 		'minItems',
-		(zs, minItems, errorMsg) => zs.min(minItems, errorMsg),
+		(zs, minItems, errorMsg) => arraySchemaCast.min(minItems, errorMsg),
 	);
 	zodSchema = extendSchemaWithMessage(
 		zodSchema,
 		jsonSchema,
 		'maxItems',
-		(zs, maxItems, errorMsg) => zs.max(maxItems, errorMsg),
+		(zs, maxItems, errorMsg) => arraySchemaCast.max(maxItems, errorMsg),
 	);
 
 	if (jsonSchema.uniqueItems) {
 		zodSchema = zodSchema.refine(
-			(value) => new Set(value.map((v) => JSON.stringify(v))).size === value.length,
+			(value: any[]) => new Set(value.map((v: any) => JSON.stringify(v))).size === value.length,
 			{
 				message: 'Array items must be unique',
 			},

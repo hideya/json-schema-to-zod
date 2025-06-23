@@ -3,13 +3,14 @@
 		"target": "es2020",
 		"module": "es2020",
 		"moduleResolution": "node",
+		"outDir": "dist/types",
 		"declaration": true,
 		"declarationMap": true,
 		"emitDeclarationOnly": true,
-		"outDir": "dist/types",
 		"strict": true,
 		"skipLibCheck": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"noErrorTruncation": true
 	},
 	"include": ["src"]
 }

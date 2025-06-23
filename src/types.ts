@@ -1,12 +1,11 @@
 import type { ZodTypeAny } from 'zod';
 
+export type Primitive = string | number | boolean | null;
+
 export type Serializable =
 	| { [key: string]: Serializable }
 	| Serializable[]
-	| string
-	| number
-	| boolean
-	| null;
+	| Primitive;
 
 export type JsonSchema = JsonSchemaObject | boolean;
 export type JsonSchemaObject = {

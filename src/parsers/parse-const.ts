@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-import type { JsonSchemaObject, Serializable } from '../types';
+import type { JsonSchemaObject, Primitive } from '../types';
 
-export const parseConst = (jsonSchema: JsonSchemaObject & { const: Serializable }) => {
+export const parseConst = (jsonSchema: JsonSchemaObject & { const: any }) => {
 	const value = jsonSchema.const;
-	return z.literal(value);
+	// Cast to Primitive to satisfy TypeScript
+	return z.literal(value as Primitive);
 };
