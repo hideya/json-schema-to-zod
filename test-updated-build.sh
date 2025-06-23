@@ -2,20 +2,12 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-echo "=== Testing ESM compatibility - Two approaches ==="
+echo "=== Testing updated build process ==="
 cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod
 
-# Build using automatic approach
-echo "Building with the standard approach..."
+# Build the package
+echo "Building with updated process..."
 npm run build
-
-# If build fails, try the manual approach
-if [ $? -ne 0 ]; then
-  echo "Standard build failed. Trying manual ESM build..."
-  npm run build:types
-  npm run build:cjs
-  node manual-esm.js
-fi
 
 # Link it
 echo "Linking the package..."
@@ -28,9 +20,6 @@ echo "=== Testing ESM imports ==="
 cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod/esm-test
 npm link @h1deya/json-schema-to-zod
 node index.js
-
-echo ""
-echo "=== If you see 'All tests completed successfully!', the ESM compatibility is working! ==="
 
 # Create a package for mcp-client-langchain-ts
 cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod

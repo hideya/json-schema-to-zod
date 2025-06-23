@@ -9,10 +9,12 @@
   },
   "scripts": {
     "clean": "rimraf dist",
+    "prebuild": "node pre-build.cjs",
     "build:ts": "tsc -p tsconfig.json",
     "fix:esm": "node esm-fix.cjs",
-    "build": "npm run clean && npm run build:ts && npm run fix:esm",
-    "test": "node esm-test/index.js"
+    "build": "npm run clean && npm run prebuild && npm run build:ts && npm run fix:esm",
+    "test": "node esm-test/index.js",
+    "postbuild": "node restore-src.cjs"
   },
   "keywords": [
     "zod",

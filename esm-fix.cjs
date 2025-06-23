@@ -14,7 +14,7 @@ async function fixImportsInEsmFiles() {
   for (const file of files) {
     let content = fs.readFileSync(file, 'utf8');
     
-    // Add .js extension to all local imports
+    // Add .js extension to all local imports - note the global flag 'g'
     content = content.replace(
       /from\s+['"](\.[^'"]+)['"]/g, 
       (match, importPath) => {
