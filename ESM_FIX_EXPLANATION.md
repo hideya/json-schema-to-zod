@@ -29,7 +29,7 @@ Our solution uses a pre/post build approach that:
    - All imports now have proper `.js` extensions
 
 3. **After compilation**:
-   - Restores the original source files without extensions
+   - Restores the original source files without extensions from the backup
    - The compiled output remains ESM-compatible
 
 This approach maintains original source code integrity while producing ESM-compatible output.
@@ -38,17 +38,16 @@ This approach maintains original source code integrity while producing ESM-compa
 
 - **pre-build.cjs**: Backs up source files and adds extensions to imports
 - **build:ts**: Compiles TypeScript to JavaScript
-- **esm-fix.cjs**: Ensures all import paths in the compiled output have proper extensions
 - **restore-src.cjs**: Restores the original source files
 
 ## Usage
 
-This approach allows the package to be used in both CommonJS and ESM environments without compatibility issues.
+This updated build only supports usage in ESM environments.
 
 ```javascript
 // ESM usage (works correctly now)
 import { jsonSchemaToZod } from '@h1deya/json-schema-to-zod';
 
-// CommonJS usage (still works as before)
-const { jsonSchemaToZod } = require('@h1deya/json-schema-to-zod');
+// CommonJS usage is not supported
+// const { jsonSchemaToZod } = require('@h1deya/json-schema-to-zod');
 ```
