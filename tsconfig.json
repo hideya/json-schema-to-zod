@@ -1,12 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "es2020",
-		"module": "es2020",
-		"moduleResolution": "node",
-		"outDir": "dist",
-		"strict": true,
-		"skipLibCheck": true,
-		"esModuleInterop": true
-	},
-	"include": ["src"]
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist/esm",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

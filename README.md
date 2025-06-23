@@ -2,7 +2,7 @@
 
 A fork of [@n8n/json-schema-to-zod](https://github.com/n8n-io/n8n/tree/master/packages/%40n8n/json-schema-to-zod) with improved ESM module compatibility.
 
-This package properly handles ESM module paths, fixing issues with Node.js ESM resolution that can occur when using the original package in ESM projects.
+This package properly handles ESM module imports, fixing issues with Node.js ESM resolution that can occur when using the original package in ESM projects.
 
 ## 🔧 Installation
 
@@ -12,14 +12,14 @@ npm install @h1deya/json-schema-to-zod
 
 ## ✨ Features
 
-- **ESM Compatible**: Works correctly in both ESM and CommonJS environments
-- **Full Feature Set**: Includes all functionality from the original package
-- **Drop-in Replacement**: Identical API to the original package
+- **ESM Compatible**: Works correctly in ESM environments
+- **Simple API**: Convert JSON Schema to Zod schema with a single function
+- **Drop-in Replacement**: Same API as the original package
 - **Fixed Module Resolution**: No more `ERR_MODULE_NOT_FOUND` errors in ESM projects
 
 ## 📚 Usage
 
-```typescript
+```javascript
 import { jsonSchemaToZod } from '@h1deya/json-schema-to-zod';
 import { z } from 'zod';
 
@@ -49,17 +49,14 @@ try {
 
 ## 🔍 What's Fixed?
 
-This fork addresses two critical issues with the original package:
+This fork addresses a critical issue with ESM module resolution in the original package. When using the package in an ESM environment (projects with `"type": "module"` in package.json), Node.js requires local imports to include file extensions (e.g., './parsers/parse-schema.js').
 
-1. **ESM Module Resolution**: When using the package in an ESM environment (projects with `"type": "module"` in package.json), Node.js requires local imports to include file extensions. Our solution:
-   - Adds `.js` extensions to all local imports in the compiled ESM output
-   - Uses `NodeNext` moduleResolution in TypeScript config
-   - Properly configures package exports for dual ESM/CommonJS compatibility
+Our solution:
 
-2. **TypeScript Compatibility**: The original package has type issues that prevent successful TypeScript compilation. Our solution:
-   - Fixes type compatibility with the Zod library
-   - Adds proper type casting for Zod methods
-   - Resolves issues with generic types and type inference
+1. Uses the original TypeScript source code without modifications
+2. Compiles to ESM format using modern TypeScript settings
+3. Adds `.js` extensions to all local imports in the compiled output
+4. Properly configures package.json for ESM usage
 
 ## 📋 Source Version
 
@@ -68,31 +65,16 @@ This package is based on the `@n8n/json-schema-to-zod` package from n8n reposito
 - **Repository**: [n8n](https://github.com/n8n-io/n8n)
 - **Commit Hash**: `351db43`
 - **Source Path**: `packages/@n8n/json-schema-to-zod`
-- **Source Date**: Check the commit date on the [n8n repository](https://github.com/n8n-io/n8n/commits/master/)
 
-No modifications were made to the original source code logic - only build configuration changes to fix ESM compatibility issues.
+The implementation has been adapted to work reliably in ESM environments while maintaining the full functionality of the original package.
 
-## 🛠️ API
+## 🙌 Contribution & Maintenance
 
-The package exports the main `jsonSchemaToZod` function:
+This approach makes it easy to incorporate future upstream changes:
 
-```typescript
-function jsonSchemaToZod<T extends z.ZodTypeAny = z.ZodTypeAny>(
-  schema: JsonSchema, 
-  options?: JsonSchemaToZodOptions
-): T;
-```
-
-### Options
-
-```typescript
-interface JsonSchemaToZodOptions {
-  withoutDefaults?: boolean;     // Don't include default values
-  withoutDescribes?: boolean;    // Don't include descriptions
-  parserOverride?: ParserOverride; // Custom parser function
-  depth?: number;                // Max recursion depth
-}
-```
+1. Update the source files from the upstream repository
+2. Run the build process with `npm run build`
+3. Test the package with `npm test`
 
 ## 🙏 Credits
 

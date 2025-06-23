@@ -13,8 +13,10 @@ rm -f postcjs.js postesm.js manual-esm.js
 rm -f tsconfig.json tsconfig.cjs.json tsconfig.esm.json tsconfig.types.json
 rm -f .eslintrc.js jest.config.js .npmignore
 
-# Remove old source files - they're not needed anymore
-rm -rf src
+# Keep the src directory for reference - DON'T REMOVE
+# We'll add a note that it's for reference only
+echo "// NOTE: This source code is kept for reference only.
+// The actual implementation used is in esm-only.cjs" > src/README.md
 
 # Remove old test scripts
 rm -f test-both-approaches.sh test-manual-esm.sh test-esm.sh test-package.js test-package.mjs verify-build.sh fix-and-install.sh
