@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "node esm-only.js",
+    "build": "node esm-only.cjs",
     "test": "node esm-test/index.js"
   },
   "keywords": [
