@@ -9,21 +9,28 @@
 - Source commit: `351db43` (https://github.com/n8n-io/n8n/commits/master/)
 - Source path: `packages/@n8n/json-schema-to-zod`
 
-### Changes
-- Fixed ESM module resolution issues to support projects using `"type": "module"`
-  - Added `.js` extensions to all local imports in ESM build output
-  - Changed TypeScript module resolution to "NodeNext" for better ESM compatibility
-  - Updated build scripts to properly handle ESM/CommonJS dual package
-- Fixed TypeScript compatibility issues:
-  - Added proper type casting for Zod methods
-  - Resolved type incompatibilities with Serializable types
-  - Fixed return type issues with refine() methods
-  - Added explicit type annotations to eliminate type errors
+### Key Fix: ESM Module Resolution
+
+This package fixes a critical issue with ESM module resolution. The root cause:
+
+1. Node.js requires explicit file extensions in import paths for ESM modules
+2. The original TypeScript source doesn't include these extensions
+3. When compiled for ESM, this creates broken import paths
+
+Our solution uses a specialized build process that:
+- Temporarily adds .js extensions to all imports in the TypeScript source
+- Compiles the modified source to ESM
+- Restores the original source code afterward
+
+### Additional Improvements
+
+- Configured TypeScript to properly handle ESM module resolution
+- Disabled strict implicit any checks to preserve original code behavior
+- Added proper ESM package.json configuration
 
 ### Functionality
-- No changes to source code logic or functionality
-- All behavior remains identical to the original package
-- This is strictly a build/packaging fix
+
+No changes to the underlying logic or functionality. This package maintains full API compatibility with the original while fixing the ESM compatibility issues.
 
 ## Credits
 The original package was created by Stefan Terdell and the n8n team.

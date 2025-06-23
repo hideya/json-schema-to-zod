@@ -1,101 +1,54 @@
 # ESM Module Resolution Fix for json-schema-to-zod
 
-## The Problem
+## Root Cause of the Issue
 
-The error you encountered when running your compiled mcp-client-langchain-ts package:
+The core problem is a mismatch between TypeScript source code conventions and ESM module requirements:
 
-```
-Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/hideya/Desktop/WS/AT/mcp-client-langchain-ts/node_modules/@n8n/json-schema-to-zod/dist/esm/parsers/parse-schema' imported from /Users/hideya/Desktop/WS/AT/mcp-client-langchain-ts/node_modules/@n8n/json-schema-to-zod/dist/esm/json-schema-to-zod.js
-```
+1. **Original TypeScript source** uses imports without file extensions:
+   ```typescript
+   import { parseSchema } from './parsers/parse-schema';
+   ```
 
-This error occurs because:
-
-1. Your project is using ES Modules (ESM) with `"type": "module"` in package.json
-2. In the Node.js ESM system, local imports (like from './parsers/parse-schema') must include file extensions (e.g., './parsers/parse-schema.js')
-3. The original `@n8n/json-schema-to-zod` package doesn't add these file extensions during the TypeScript compilation process
-
-## The Solution
-
-This fixed package (`@h1deya/json-schema-to-zod`) addresses the issue by:
-
-1. **Adding .js extensions to imports**: We've enhanced the `postesm.js` script to modify all local import statements in the compiled JavaScript files, adding the required `.js` extension. This ensures Node.js can properly resolve module paths in an ESM environment.
-
-2. **Using modern module resolution**: Changed the `moduleResolution` in `tsconfig.esm.json` from "node" to "NodeNext", which better handles ESM compatibility.
-
-3. **Dual package hazard handling**: Properly structured the package to support both ESM and CommonJS environments by correctly configuring:
-   - The "exports" field in package.json
-   - Appropriate package.json files in the dist directories
-
-## Technical Implementation
-
-The key changes are:
-
-1. **Enhanced postesm.js script**:
+2. **Node.js ESM modules** require explicit file extensions:
    ```javascript
-   const fs = require('fs');
-   const path = require('path');
-   const { promisify } = require('util');
-   const glob = promisify(require('glob'));
-
-   // Write package.json to mark as ESM
-   fs.writeFileSync('./dist/esm/package.json', '{"type":"module"}', 'utf-8');
-
-   // Function to add .js extension to all local imports
-   async function fixImportsInEsmFiles() {
-     const files = await glob('./dist/esm/**/*.js');
-     
-     for (const file of files) {
-       let content = fs.readFileSync(file, 'utf8');
-       
-       // Add .js extension to all local imports
-       content = content.replace(
-         /from\s+['"](\.[^'"]+)['"]/g, 
-         (match, importPath) => {
-           // Skip if already has an extension
-           if (path.extname(importPath) !== '') {
-             return match;
-           }
-           return `from '${importPath}.js'`;
-         }
-       );
-       
-       fs.writeFileSync(file, content, 'utf8');
-     }
-   }
-
-   fixImportsInEsmFiles();
+   import { parseSchema } from './parsers/parse-schema.js';
    ```
 
-2. **Updated tsconfig.esm.json**:
-   ```json
-   {
-     "compilerOptions": {
-       "moduleResolution": "NodeNext",
-       // other options...
-     }
-   }
-   ```
+When compiling TypeScript for ESM using modern module resolution (`"moduleResolution": "NodeNext"`), it enforces this requirement but doesn't automatically add the extensions.
 
-These changes ensure that when your project imports from this package in an ESM context, all module paths will be correctly resolved.
+## The Solution: A Specialized Build Process
 
-## Source Information
+Our solution uses a pre/post build approach that:
 
-This package is based on:
+1. **Before compilation**:
+   - Backs up the original source files
+   - Temporarily adds `.js` extensions to all imports in TypeScript files
 
-- **Original Package**: `@n8n/json-schema-to-zod`
-- **Source Repository**: [n8n](https://github.com/n8n-io/n8n)
-- **Commit Hash**: `351db43`
-- **Source Path**: `packages/@n8n/json-schema-to-zod`
+2. **During compilation**:
+   - TypeScript compiles the modified source to ESM modules
+   - All imports now have proper `.js` extensions
 
-No changes were made to the actual source code logic - only to the build configuration to fix ESM compatibility.
+3. **After compilation**:
+   - Restores the original source files without extensions
+   - The compiled output remains ESM-compatible
+
+This approach maintains original source code integrity while producing ESM-compatible output.
+
+## Key Scripts in the Build Process
+
+- **pre-build.cjs**: Backs up source files and adds extensions to imports
+- **build:ts**: Compiles TypeScript to JavaScript
+- **esm-fix.cjs**: Ensures all import paths in the compiled output have proper extensions
+- **restore-src.cjs**: Restores the original source files
 
 ## Usage
 
-You can use this package as a drop-in replacement for @n8n/json-schema-to-zod:
+This approach allows the package to be used in both CommonJS and ESM environments without compatibility issues.
 
-```bash
-npm uninstall @n8n/json-schema-to-zod
-npm install @h1deya/json-schema-to-zod
+```javascript
+// ESM usage (works correctly now)
+import { jsonSchemaToZod } from '@h1deya/json-schema-to-zod';
+
+// CommonJS usage (still works as before)
+const { jsonSchemaToZod } = require('@h1deya/json-schema-to-zod');
 ```
-
-No code changes are needed as the API remains identical.
