@@ -38,7 +38,7 @@ This approach maintains original source code integrity while producing ESM-compa
 
 - **pre-build.cjs**: Backs up source files and adds extensions to imports
 - **build:ts**: Compiles TypeScript to JavaScript
-- **restore-src.cjs**: Restores the original source files
+- **post-build.cjs**: Restores the original source files
 
 ## Usage
 

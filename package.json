@@ -17,7 +17,7 @@
     "prebuild": "node pre-build.cjs",
     "build": "npm run clean && npm run build:ts",
     "build:ts": "tsc -p tsconfig.json",
-    "postbuild": "node restore-src.cjs",
+    "postbuild": "node post-build.cjs",
     "test": "bash test-esm.sh",
     "publish:test": "npm run clean:all && npm install && npm publish --access=public --dry-run"
   },
