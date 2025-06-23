@@ -9,9 +9,10 @@ fs.writeFileSync('./dist/esm/package.json', JSON.stringify({ type: 'module' }));
 // Function to add .js extension to all local imports in ESM files
 async function fixImportsInEsmFiles() {
   console.log('Adding .js extensions to ESM imports...');
-  const files = await glob('./dist/esm/**/*.js');
   
-  for (const file of files) {
+  // Fix JavaScript files
+  const jsFiles = await glob('./dist/esm/**/*.js');
+  for (const file of jsFiles) {
     let content = fs.readFileSync(file, 'utf8');
     
     // Add .js extension to all local imports - note the global flag 'g'
@@ -29,7 +30,27 @@ async function fixImportsInEsmFiles() {
     fs.writeFileSync(file, content, 'utf8');
   }
   
-  console.log(`Fixed ${files.length} files`);
+  // Fix declaration (.d.ts) files
+  const dtsFiles = await glob('./dist/esm/**/*.d.ts');
+  for (const file of dtsFiles) {
+    let content = fs.readFileSync(file, 'utf8');
+    
+    // Add .js extension to all local imports in declaration files
+    content = content.replace(
+      /from\s+['"](\.[^'"]+)['"]/g, 
+      (match, importPath) => {
+        // Skip if already has an extension
+        if (path.extname(importPath) !== '') {
+          return match;
+        }
+        return `from '${importPath}.js'`;
+      }
+    );
+    
+    fs.writeFileSync(file, content, 'utf8');
+  }
+  
+  console.log(`Fixed ${jsFiles.length} JS files and ${dtsFiles.length} declaration files`);
 }
 
 // Main function

@@ -17,5 +17,6 @@ dist
 # Misc
 .DS_Store
 *.log
+
 src-backup/
-esm-test/package-lock.json
+test-esm/package-lock.json

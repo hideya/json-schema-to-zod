@@ -12,9 +12,11 @@ The repository has been set up with all the necessary files to build and publish
 
 1. Install dependencies and build the package:
    ```bash
-   cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod
-   chmod +x setup.sh
-   ./setup.sh
+   # Install dependencies
+   npm install
+
+   # Build the package
+   npm run build
    ```
 
 2. Test the package locally with:

@@ -4,8 +4,12 @@
   "description": "Converts JSON schema objects into Zod schemas - ESM-compatible fork of @n8n/json-schema-to-zod",
   "type": "module",
   "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "exports": {
-    ".": "./dist/esm/index.js"
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "default": "./dist/esm/index.js"
+    }
   },
   "scripts": {
     "clean:all": "git clean -fdxn -e .env && read -p 'OK?' && git clean -fdx -e .env",
@@ -14,7 +18,8 @@
     "build": "npm run clean && npm run build:ts",
     "build:ts": "tsc -p tsconfig.json",
     "postbuild": "node restore-src.cjs",
-    "test": "npm link && pushd esm-test && npm link @h1deya/json-schema-to-zod && node index.js && popd && npm unlink"
+    "test": "bash test-esm.sh",
+    "publish:test": "npm run clean:all && npm install && npm publish --access=public --dry-run"
   },
   "keywords": [
     "zod",
@@ -23,7 +28,7 @@
     "converter",
     "esm"
   ],
-  "author": "Hideya Kawahara",
+  "author": "hideya kawahara",
   "contributors": [
     "Stefan Terdell (original author)",
     "n8n (https://github.com/n8n-io)"
