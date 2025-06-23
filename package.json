@@ -12,7 +12,7 @@
     "prebuild": "node pre-build.cjs",
     "build:ts": "tsc -p tsconfig.json",
     "postbuild": "node restore-src.cjs",
-    "build": "npm run clean && npm run prebuild && npm run build:ts && npm run postbuild",
+    "build": "npm run clean && npm run build:ts",
     "test": "node esm-test/index.js"
   },
   "keywords": [

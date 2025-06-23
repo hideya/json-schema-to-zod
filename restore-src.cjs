@@ -15,8 +15,8 @@ try {
     // Copy backup back to src
     fs.cpSync('./src-backup', './src', { recursive: true });
     
-    // Clean up the backup
-    fs.rmSync('./src-backup', { recursive: true, force: true });
+    // // Clean up the backup
+    // fs.rmSync('./src-backup', { recursive: true, force: true });
     
     console.log('Source files successfully restored from backup');
   } else {

@@ -3,7 +3,7 @@ const path = require('path');
 const { promisify } = require('util');
 const glob = promisify(require('glob'));
 
-async function backupSourceFiles() {
+function backupSourceFiles() {
   console.log('Creating backup of source files...');
   
   // Remove any existing backup
@@ -44,7 +44,7 @@ async function addExtensionsToImports() {
 // Main function
 async function main() {
   try {
-    await backupSourceFiles();
+    backupSourceFiles();
     await addExtensionsToImports();
     console.log('Pre-processing completed successfully');
   } catch (error) {
