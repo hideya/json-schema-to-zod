@@ -1,0 +1,11 @@
+{
+  "name": "esm-test",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "description": "Test ESM imports",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  }
+}
