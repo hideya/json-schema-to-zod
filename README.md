@@ -1,4 +1,6 @@
-# @h1deya/json-schema-to-zod
+# Json-Schema-to-Zod
+
+A package to convert JSON schema (draft 4+) objects into Zod schemas in the form of Zod objects at runtime.
 
 A fork of [@n8n/json-schema-to-zod](https://github.com/n8n-io/n8n/tree/master/packages/%40n8n/json-schema-to-zod) with improved ESM module compatibility.
 
