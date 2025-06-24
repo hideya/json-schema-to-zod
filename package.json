@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "description": "Converts JSON schema objects into Zod schemas - ESM-compatible fork of @n8n/json-schema-to-zod",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "exports": {
@@ -19,7 +25,7 @@
     "build:ts": "tsc -p tsconfig.json",
     "postbuild": "node post-build.cjs",
     "test": "bash test-esm.sh",
-    "publish:test": "npm run clean:all && npm install && npm publish --access=public --dry-run"
+    "publish:test": "npm run build && npm publish --access=public --dry-run"
   },
   "keywords": [
     "zod",
@@ -36,7 +42,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hideya/json-schema-to-zod"
+    "url": "git+https://github.com/hideya/json-schema-to-zod.git"
   },
   "originalSource": {
     "repository": "https://github.com/n8n-io/n8n",

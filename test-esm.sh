@@ -3,7 +3,9 @@
 set -e  # Exit immediately if a command exits with a non-zero status
 
 echo "=== Testing updated build process ==="
-cd /Users/hideya/Desktop/WS/AT/json-schema-to-zod
+
+package_name=$(jq -r '.name' package.json)
+echo "Package name: $package_name"
 
 # Build the package
 echo "Building with updated process..."
@@ -11,25 +13,20 @@ npm run build
 
 # Link it
 echo "Linking the package..."
-npm unlink || true
+npm -g uninstall $package_name || true
 npm link
 
 # Run the ESM test
 echo ""
 echo "=== Testing ESM imports ==="
 pushd test-esm
-npm link @h1deya/json-schema-to-zod
+npm link $package_name
 node index.js
 popd
 
-# Create a package for mcp-client-langchain-ts
-echo ""
-echo "Creating package tarball..."
-npm pack
+npm -g uninstall $package_name || true
 
-echo ""
-echo "To install in your main project, run:"
-echo "cd ../mcp-client-langchain-ts"
-echo "npm uninstall @n8n/json-schema-to-zod"
-echo "npm install ../json-schema-to-zod/h1deya-json-schema-to-zod-0.1.0.tgz"
-echo "npm run build"
+# # Create a package for mcp-client-langchain-ts
+# echo ""
+# echo "Creating package tarball..."
+# npm pack
