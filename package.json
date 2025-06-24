@@ -1,0 +1,62 @@
+{
+  "name": "@h1deya/json-schema-to-zod",
+  "version": "0.1.0",
+  "description": "Converts JSON schema objects into Zod schemas - ESM-compatible fork of @n8n/json-schema-to-zod",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "default": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "clean:all": "git clean -fdxn -e .env && read -p 'OK?' && git clean -fdx -e .env",
+    "clean": "rimraf dist",
+    "prebuild": "node pre-build.cjs",
+    "build": "npm run clean && npm run build:ts",
+    "build:ts": "tsc -p tsconfig.json",
+    "postbuild": "node post-build.cjs",
+    "test": "bash test-esm.sh",
+    "publish:test": "npm run build && npm publish --access=public --dry-run"
+  },
+  "keywords": [
+    "zod",
+    "json",
+    "schema",
+    "converter",
+    "esm"
+  ],
+  "author": "hideya kawahara",
+  "contributors": [
+    "Stefan Terdell (original author)",
+    "n8n (https://github.com/n8n-io)"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hideya/json-schema-to-zod.git"
+  },
+  "originalSource": {
+    "repository": "https://github.com/n8n-io/n8n",
+    "path": "packages/@n8n/json-schema-to-zod",
+    "commit": "351db43"
+  },
+  "peerDependencies": {
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "glob": "^8.1.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  }
+}
