@@ -66,6 +66,24 @@ This approach:
 - Produces ESM-compatible output that works in modern Node.js environments
 - Maintains full functionality and API compatibility
 
+### Additional Fix: CommonJS Require Removal
+
+A leftover CommonJS `require()` usage was found in `src/parsers/parse-nullable.ts`
+and was replaced with an ESM `import`:
+
+```typescript
+--- a/src/parsers/parse-nullable.ts
++++ b/src/parsers/parse-nullable.ts
+@@ -1,9 +1,9 @@
+ import { z } from 'zod';
+ 
+ import type { JsonSchemaObject } from '../types';
++import { parseSchema } from './parse-schema';
+ 
+ export const parseNullable = (jsonSchema: JsonSchemaObject & { nullable: true }, refs: any) => {
+-       const { parseSchema } = require('./parse-schema');
+```
+
 ## Source & Maintenance
 
 This package is based on the original code from:

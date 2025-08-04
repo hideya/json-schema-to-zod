@@ -1,6 +1,12 @@
 # Changelog
 
-## v0.1.0 (Initial Release)
+## [0.1.1] - 2025-06-30
+
+## Fixed
+- Fix a leftover CommonJS `require()` usage found in `src/parsers/parse-nullable.ts`
+
+
+## [0.1.0] - 2025-06-24
 
 **Release Date:** TBD (When you publish the package)
 
