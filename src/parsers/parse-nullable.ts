@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import type { JsonSchemaObject } from '../types';
+import { parseSchema } from './parse-schema';
 
 export const parseNullable = (jsonSchema: JsonSchemaObject & { nullable: true }, refs: any) => {
-	const { parseSchema } = require('./parse-schema');
 	// Remove nullable flag to avoid infinite recursion
 	const { nullable, ...schemaWithoutNullable } = jsonSchema;
 
